@@ -1,15 +1,6 @@
 import Link from 'next/link';
-import { getServerSession } from 'next-auth';
-import { redirect } from 'next/navigation';
-import { authOptions } from '@/lib/auth';
-import { SignOutButton } from '@/components/sign-out-button';
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    redirect('/login');
-  }
-
   return (
     <div className="min-h-screen">
       <header className="border-b border-slate-800 bg-slate-950/80">
@@ -21,7 +12,6 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             <Link href="/app">Meetings</Link>
             <Link href="/app/meetings/new">New Meeting</Link>
             <Link href="/app/settings">Settings</Link>
-            <SignOutButton />
           </nav>
         </div>
       </header>

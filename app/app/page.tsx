@@ -1,7 +1,6 @@
 import Link from 'next/link';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { getEffectiveUserId } from '@/lib/authUser';
 import { Input } from '@/components/ui';
 import { MeetingList } from '@/components/meeting-list';
 
@@ -10,14 +9,13 @@ export default async function DashboardPage({
 }: {
   searchParams: { q?: string };
 }) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) return null;
+  const userId = await getEffectiveUserId();
 
   const q = searchParams.q?.trim();
 
   const meetings = await prisma.meeting.findMany({
     where: {
-      userId: session.user.id,
+      userId,
       ...(q
         ? {
             OR: [

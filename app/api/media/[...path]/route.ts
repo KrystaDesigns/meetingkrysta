@@ -1,18 +1,14 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { getEffectiveUserId } from '@/lib/authUser';
 
 export async function GET(
   _request: Request,
   { params }: { params: { path: string[] } }
 ) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  const userId = await getEffectiveUserId();
 
   const relativePath = params.path.join('/');
   const normalized = path.normalize(relativePath);
@@ -22,7 +18,7 @@ export async function GET(
 
   const meeting = await prisma.meeting.findFirst({
     where: {
-      userId: session.user.id,
+      userId,
       mediaPath: normalized
     }
   });

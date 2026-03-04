@@ -1,17 +1,15 @@
 import { notFound } from 'next/navigation';
-import { getServerSession } from 'next-auth';
 import { format } from 'date-fns';
-import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { getEffectiveUserId } from '@/lib/authUser';
 import { formatSeconds } from '@/lib/utils';
 import { MeetingDetailClient } from '@/components/meeting-detail';
 
 export default async function MeetingDetailPage({ params }: { params: { id: string } }) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) return null;
+  const userId = await getEffectiveUserId();
 
   const meeting = await prisma.meeting.findFirst({
-    where: { id: params.id, userId: session.user.id },
+    where: { id: params.id, userId },
     include: {
       transcript: {
         include: {

@@ -1,14 +1,10 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import { createMeetingAndProcess } from '@/lib/meetings';
+import { getEffectiveUserId } from '@/lib/authUser';
 import { prisma } from '@/lib/prisma';
 
 export async function POST(request: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  const userId = await getEffectiveUserId();
 
   try {
     const formData = await request.formData();
@@ -27,7 +23,7 @@ export async function POST(request: Request) {
     }
 
     const result = await createMeetingAndProcess({
-      userId: session.user.id,
+      userId,
       title,
       description,
       scheduledAt: scheduledAtRaw ? new Date(scheduledAtRaw) : undefined,
@@ -42,10 +38,7 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  const userId = await getEffectiveUserId();
 
   const { searchParams } = new URL(request.url);
   const q = searchParams.get('q')?.trim();
@@ -53,7 +46,7 @@ export async function GET(request: Request) {
   const pageSize = Math.min(Number(searchParams.get('pageSize') || '20'), 50);
 
   const where = {
-    userId: session.user.id,
+    userId,
     ...(q
       ? {
           OR: [

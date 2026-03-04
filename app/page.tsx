@@ -12,11 +12,8 @@ export default function LandingPage() {
           Upload recordings, generate AI transcripts and summaries, and search every key decision across your meetings.
         </p>
         <div className="mt-8 flex gap-3">
-          <Link href="/register" className="rounded-md bg-brand px-4 py-2 font-medium hover:bg-brand-dark">
-            Sign up
-          </Link>
-          <Link href="/login" className="rounded-md border border-slate-700 px-4 py-2 font-medium hover:bg-slate-900">
-            Log in
+          <Link href="/app" className="rounded-md bg-brand px-4 py-2 font-medium hover:bg-brand-dark">
+            Open app
           </Link>
         </div>
       </section>
