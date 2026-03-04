@@ -4,8 +4,15 @@ import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 
 const registerSchema = z.object({
-  name: z.string().min(1).max(100).optional(),
-  email: z.string().email(),
+  name: z.preprocess(
+    (value) => {
+      if (typeof value !== 'string') return undefined;
+      const trimmed = value.trim();
+      return trimmed.length ? trimmed : undefined;
+    },
+    z.string().min(1).max(100).optional()
+  ),
+  email: z.string().email().transform((value) => value.trim().toLowerCase()),
   password: z.string().min(8).max(100)
 });
 
