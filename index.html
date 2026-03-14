@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Test Case to Selenium Code | QA Copilot Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <p class="eyebrow">AI-Assisted QA Automation</p>
+      <h1>From Plain English Test Steps to Selenium Java</h1>
+      <p>
+        This web app explains how an LLM-powered agent can translate manual test cases into
+        Selenium Java scripts, and where this approach fits in a real Jenkins CI/CD workflow.
+      </p>
+      <a href="#playground" class="btn">Try the Translator Demo</a>
+    </header>
+
+    <main>
+      <section>
+        <h2>1) What the system actually does</h2>
+        <div class="grid four">
+          <article class="card">
+            <h3>Read Test Case</h3>
+            <p>Loads a plain English test case from TXT/JIRA/Confluence data.</p>
+          </article>
+          <article class="card">
+            <h3>Send to LLM</h3>
+            <p>A Python agent prompts GPT (or local LLM) as a test-case-to-code translator.</p>
+          </article>
+          <article class="card">
+            <h3>Generate Java</h3>
+            <p>Produces Selenium Java test classes with assertions and common framework patterns.</p>
+          </article>
+          <article class="card">
+            <h3>Save Script</h3>
+            <p>Writes generated code as <code>.java</code> files to the automation repository.</p>
+          </article>
+        </div>
+        <pre class="flow">Plain English Steps → Python Agent → OpenAI API → Selenium Java (.java)</pre>
+      </section>
+
+      <section>
+        <h2>2) Where this is useful in real projects</h2>
+        <div class="card">
+          <pre class="flow">Test Cases → AI Generates Selenium Scripts → Git Repo → Jenkins Pipeline → Reports</pre>
+          <ul>
+            <li>Fast bootstrap of repetitive test scripts.</li>
+            <li>Converts manual QA assets into automation starters.</li>
+            <li>Speeds up iteration when requirements change.</li>
+          </ul>
+          <p class="note">Engineers still own locator quality, framework design, flakiness control, and CI integration.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>3) Useful vs demo-only reality</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Area</th>
+                <th>Useful in production</th>
+                <th>Demo limitation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Locators</td>
+                <td>AI drafts selectors quickly</td>
+                <td>May guess wrong IDs/XPath and break often</td>
+              </tr>
+              <tr>
+                <td>Framework</td>
+                <td>Can scaffold Page Objects and tests</td>
+                <td>Often dumps one large file</td>
+              </tr>
+              <tr>
+                <td>Tooling</td>
+                <td>Can suggest Maven/TestNG/Allure setup</td>
+                <td>Doesn't wire everything automatically</td>
+              </tr>
+              <tr>
+                <td>Maintenance</td>
+                <td>Helpful for refactor suggestions</td>
+                <td>Humans still needed for stable suites</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h2>4) Better architecture for a serious portfolio project</h2>
+        <div class="grid two">
+          <article class="card">
+            <h3>Recommended Stack</h3>
+            <ul>
+              <li>Python AI agent</li>
+              <li>OpenAI API or local LLM</li>
+              <li>Selenium Java + TestNG + Maven</li>
+              <li>GitHub + Jenkins + Allure reports</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Upgraded Flow</h3>
+            <ol>
+              <li>Read test case from TXT/JIRA</li>
+              <li>Generate Page Object + Test class + locator proposals</li>
+              <li>Commit/push to GitHub automatically</li>
+              <li>Jenkins executes nightly and publishes reports</li>
+            </ol>
+          </article>
+        </div>
+      </section>
+
+      <section id="playground">
+        <h2>5) Interactive translator demo</h2>
+        <p>
+          Paste numbered test steps in plain English. This demo converts them into a basic
+          Selenium + TestNG Java skeleton to show the concept.
+        </p>
+        <div class="playground">
+          <label for="steps">Manual test steps</label>
+          <textarea id="steps" rows="8">1. Open Chrome
+2. Go to login page
+3. Enter username "qa_user"
+4. Enter password "secret123"
+5. Click login
+6. Verify dashboard is visible</textarea>
+          <button id="generate">Generate Java Test</button>
+          <label for="output">Generated Selenium Java</label>
+          <textarea id="output" rows="16" readonly></textarea>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        Direction of travel: autonomous QA agents that read DOMs, propose resilient locators,
+        execute tests, and report outcomes.
+      </p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
