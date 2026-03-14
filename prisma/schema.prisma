@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MeetingStatus {
+  PENDING
+  PROCESSING
+  READY
+  FAILED
+}
+
+model User {
+  id           String    @id @default(cuid())
+  name         String?
+  email        String    @unique
+  passwordHash String
+  meetings     Meeting[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Meeting {
+  id              String         @id @default(cuid())
+  userId          String
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title           String
+  description     String?
+  status          MeetingStatus  @default(PENDING)
+  scheduledAt     DateTime?
+  durationSeconds Int?
+  mediaPath       String?
+  language        String?
+  transcript      Transcript?
+  summary         MeetingSummary?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([status])
+}
+
+model Transcript {
+  id        String              @id @default(cuid())
+  meetingId String              @unique
+  meeting   Meeting             @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  text      String
+  segments  TranscriptSegment[]
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+}
+
+model TranscriptSegment {
+  id               String     @id @default(cuid())
+  transcriptId     String
+  transcript       Transcript @relation(fields: [transcriptId], references: [id], onDelete: Cascade)
+  speaker          String
+  startTimeSeconds Float
+  endTimeSeconds   Float
+  text             String
+
+  @@index([transcriptId, startTimeSeconds])
+}
+
+model MeetingSummary {
+  id           String   @id @default(cuid())
+  meetingId    String   @unique
+  meeting      Meeting  @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  summary      String
+  keyTakeaways Json
+  actionItems  Json
+  createdAt    DateTime @default(now())
+}
